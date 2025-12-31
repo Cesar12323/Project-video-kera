@@ -8,7 +8,6 @@
 
 A desktop application for creating animated videos using AI-generated code. Built with **Electron**, **Next.js**, and **Remotion** - inspired by the amazing work of creators who use Remotion to make programmatic videos on YouTube.
 
-![Preview](https://via.placeholder.com/800x400/1a1a2e/ffffff?text=KERA+Project+Video)
 
 ---
 
