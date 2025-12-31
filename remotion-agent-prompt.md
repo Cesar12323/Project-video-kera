@@ -51,6 +51,30 @@ export default MyAnimation;
 
 ## Available Remotion Imports
 
+**⚠️ CRITICAL: You can ONLY use these imports. Using ANY other function or variable will cause "Reference Not Defined" error!**
+
+```tsx
+// THESE ARE THE ONLY VALID IMPORTS:
+import React from 'react';
+import { 
+  useCurrentFrame,     // Hook - get current frame number
+  useVideoConfig,      // Hook - get { fps, width, height, durationInFrames }
+  interpolate,         // Animation - numeric values
+  interpolateColors,   // Animation - color values (REQUIRED for colors!)
+  spring,              // Physics animation
+  Easing,              // Easing functions
+  AbsoluteFill,        // Component - full frame container
+  Sequence,            // Component - time shift
+  Img,                 // Component - image with loading
+} from 'remotion';
+```
+
+**DO NOT USE (will crash):**
+- ❌ `random` (unless you import it)
+- ❌ `Audio`, `Video` (we don't have media files)
+- ❌ `useState`, `useEffect` (not needed)
+- ❌ Any custom function you haven't defined
+
 ### Hooks
 - `useCurrentFrame()` - Returns current frame number
 - `useVideoConfig()` - Returns { fps, width, height, durationInFrames }
