@@ -12,6 +12,10 @@ A desktop application for creating animated videos using AI-generated code. Buil
 
 ---
 
+> ⚠️ **DISCLAIMER**: This is a personal/experimental project. It's not perfect and probably won't be actively maintained. The n8n integration can be buggy, and there may be various issues. That said, **it does what it needs to do** - generate AI-powered video animations. Use at your own risk! 🙃
+
+---
+
 ## ✨ Features
 
 - 🤖 **AI Code Generation** - Generate Remotion animation code using multiple AI providers:
