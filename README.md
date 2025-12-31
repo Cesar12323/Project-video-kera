@@ -21,8 +21,8 @@ A desktop application for creating animated videos using AI-generated code. Buil
 - 🤖 **AI Code Generation** - Generate Remotion animation code using multiple AI providers:
   - Google Gemini
   - OpenRouter (access to Claude, GPT-4, and more)
-  - Anthropic Claude
-  - OpenAI GPT-4
+  - Anthropic Claude ( just the cli, yes I know)
+ 
   
 - 📝 **Monaco Code Editor** - Full-featured code editor with syntax highlighting
 
@@ -157,31 +157,10 @@ cp .env.example .env
 
 ---
 
-## 🙏 Credits & Inspiration
 
-This project was inspired by the amazing creators who use **Remotion** to create programmatic videos on YouTube. Special thanks to:
-
-- **[Fireship](https://www.youtube.com/@Fireship)** - For inspiring fast-paced, code-driven content
-- **[Remotion](https://remotion.dev)** - The incredible framework that makes this possible
-- **All Remotion YouTubers** - Who showed what's possible with code-generated videos
-
----
 
 ## 📝 License
 
 MIT License - feel free to use this project for your own video creations!
 
----
 
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to:
-- Report bugs
-- Suggest features
-- Submit pull requests
-
----
-
-<p align="center">
-  Made with ❤️ and lots of ☕
-</p>
