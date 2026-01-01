@@ -12,7 +12,29 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    // Electron and renderer (CommonJS)
+    "electron/**",
+    "remotion-renderer/**",
+    // Old test files
+    "Render new engine/**",
   ]),
+  // Custom rules for this project
+  {
+    files: ["**/*.ts", "**/*.tsx"],
+    rules: {
+      // Allow any in type declarations
+      "@typescript-eslint/no-explicit-any": "warn",
+      // Allow unused vars with underscore prefix
+      "@typescript-eslint/no-unused-vars": ["warn", { argsIgnorePattern: "^_", varsIgnorePattern: "^_" }],
+    },
+  },
+  {
+    files: ["**/*.d.ts"],
+    rules: {
+      // Allow any in declaration files
+      "@typescript-eslint/no-explicit-any": "off",
+    },
+  },
 ]);
 
 export default eslintConfig;

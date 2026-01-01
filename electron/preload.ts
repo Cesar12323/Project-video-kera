@@ -61,6 +61,12 @@ export interface SceneStreamData {
 
 // Expose protected methods to renderer process
 contextBridge.exposeInMainWorld('electronAPI', {
+  // System Paths (sync)
+  getTempDir: (): string => ipcRenderer.sendSync('system:getTempDir'),
+  getVideosDir: (): string => ipcRenderer.sendSync('system:getVideosDir'),
+  getDownloadsDir: (): string => ipcRenderer.sendSync('system:getDownloadsDir'),
+  getHomeDir: (): string => ipcRenderer.sendSync('system:getHomeDir'),
+
   // File Operations
   openFile: (): Promise<FileOpenResult | null> =>
     ipcRenderer.invoke('file:open'),
@@ -157,6 +163,10 @@ contextBridge.exposeInMainWorld('electronAPI', {
 declare global {
   interface Window {
     electronAPI: {
+      getTempDir: () => string;
+      getVideosDir: () => string;
+      getDownloadsDir: () => string;
+      getHomeDir: () => string;
       openFile: () => Promise<FileOpenResult | null>;
       saveFile: (content: string, filePath: string) => Promise<{ success: boolean; error?: string }>;
       saveFileAs: (content: string) => Promise<{ filePath: string } | null>;

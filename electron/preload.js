@@ -1,15 +1,13 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const electron_1 = require("electron");
-
 // Expose protected methods to renderer process
 electron_1.contextBridge.exposeInMainWorld('electronAPI', {
-    // System Paths (via IPC to main process)
+    // System Paths (sync)
     getTempDir: () => electron_1.ipcRenderer.sendSync('system:getTempDir'),
     getVideosDir: () => electron_1.ipcRenderer.sendSync('system:getVideosDir'),
     getDownloadsDir: () => electron_1.ipcRenderer.sendSync('system:getDownloadsDir'),
     getHomeDir: () => electron_1.ipcRenderer.sendSync('system:getHomeDir'),
-
     // File Operations
     openFile: () => electron_1.ipcRenderer.invoke('file:open'),
     saveFile: (content, filePath) => electron_1.ipcRenderer.invoke('file:save', content, filePath),
@@ -38,7 +36,6 @@ electron_1.contextBridge.exposeInMainWorld('electronAPI', {
     openExternal: (filePath) => electron_1.ipcRenderer.invoke('shell:openFile', filePath),
     // Dialog Operations
     selectFolder: () => electron_1.ipcRenderer.invoke('dialog:selectFolder'),
-    showSaveVideoDialog: (defaultName) => electron_1.ipcRenderer.invoke('dialog:saveVideo', defaultName),
     // Video Operations
     getVideoDataUrl: (filePath) => electron_1.ipcRenderer.invoke('video:getDataUrl', filePath),
     // Code Injection (for n8n integration)
@@ -48,7 +45,7 @@ electron_1.contextBridge.exposeInMainWorld('electronAPI', {
         return () => electron_1.ipcRenderer.removeListener('code:inject', handler);
     },
     // Claude AI Generation
-    claudeGenerate: (prompt, config) => electron_1.ipcRenderer.invoke('claude:generate', prompt, config),
+    claudeGenerate: (prompt) => electron_1.ipcRenderer.invoke('claude:generate', prompt),
     // Claude Streaming
     onClaudeStream: (callback) => {
         const handler = (_, data) => callback(data);

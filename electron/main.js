@@ -173,7 +173,7 @@ const createWindow = () => {
 };
 electron_1.ipcMain.handle('render:start', async (event, job) => {
     const logFile = path.join(electron_1.app.getAppPath(), 'backend_debug.log');
-    const probeFile = path.join('electron_1.app.getAppPath()', 'backend_probe.log');
+    const probeFile = path.join(electron_1.app.getAppPath(), 'backend_probe.log');
 
     const logRender = (msg) => {
         const fullMsg = `[RENDER] ${msg}`;
@@ -474,7 +474,6 @@ electron_1.ipcMain.handle('claude:generate', async (event, prompt, config) => {
             return { success: false, error: result.error };
         }
     } catch (err) {
-        clearInterval(progressInterval);
         log(`Exception in main process: ${err.message}`);
         console.error("Main Process AI Error:", err);
         if (mainWindow) {

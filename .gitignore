@@ -72,3 +72,13 @@ next-env.d.ts
 .vscode
 *.swp
 *.swo
+
+# Test/temp files in root
+test-*.tsx
+test-*.js
+test-*.mp4
+test-*.mov
+*_output.mp4
+
+# Old render engine (contains large files)
+Render new engine/
