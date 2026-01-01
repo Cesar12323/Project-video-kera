@@ -64,8 +64,16 @@ test_output.log
 *.tsbuildinfo
 next-env.d.ts
 
-# Remotion renderer node_modules
+# Remotion renderer node_modules (both locations)
 /remotion-renderer/renderer/node_modules
+/remotion-renderer/node
+
+# Remotion renderer output videos and test files
+/remotion-renderer/*.mp4
+/remotion-renderer/*.tsx
+/remotion-renderer/*.mov
+/remotion-renderer/README.txt
+/remotion-renderer/render.bat
 
 # IDE
 .idea
