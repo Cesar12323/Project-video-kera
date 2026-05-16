@@ -42,6 +42,17 @@ const child_process_1 = require("child_process");
 const ai_service_1 = require("./ai-service");
 const url = __importStar(require("url"));
 const API_PORT = 3333;
+
+// Funzione per pulire il codice dai delimitatori markdown
+const cleanCodeFromMarkdown = (code) => {
+    if (!code) return code;
+    let cleaned = code;
+    // Rimuovi code fences all'inizio (```tsx, ```typescript, ```js, ```, ecc.)
+    cleaned = cleaned.replace(/^```(?:tsx|typescript|ts|jsx|javascript|js)?\s*\n?/i, '');
+    // Rimuovi code fences alla fine
+    cleaned = cleaned.replace(/\n?```\s*$/i, '');
+    return cleaned.trim();
+};
 if (require('electron-squirrel-startup'))
     electron_1.app.quit();
 let mainWindow = null;
@@ -77,8 +88,9 @@ const startApiServer = () => {
                         return;
                     }
                     if (mainWindow) {
-                        console.log('[API] Sending code:inject IPC');
-                        mainWindow.webContents.send('code:inject', { code, autoRender, outputPath });
+                        const cleanedCode = cleanCodeFromMarkdown(code);
+                        console.log('[API] Sending code:inject IPC (cleaned markdown)');
+                        mainWindow.webContents.send('code:inject', { code: cleanedCode, autoRender, outputPath });
                         mainWindow.focus();
                         res.writeHead(200, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ success: true, message: autoRender ? 'Code injected and render started' : 'Code injected successfully' }));
@@ -116,8 +128,9 @@ const startApiServer = () => {
                         return;
                     }
                     if (mainWindow) {
-                        console.log('[API] Sending file:inject IPC');
-                        mainWindow.webContents.send('code:inject', { code, autoRender, outputPath });
+                        const cleanedCode = cleanCodeFromMarkdown(code);
+                        console.log('[API] Sending file:inject IPC (cleaned markdown)');
+                        mainWindow.webContents.send('code:inject', { code: cleanedCode, autoRender, outputPath });
                         mainWindow.focus();
                         res.writeHead(200, { 'Content-Type': 'application/json' });
                         res.end(JSON.stringify({ success: true, message: autoRender ? 'File loaded and render started' : 'File loaded successfully' }));
@@ -184,7 +197,18 @@ electron_1.ipcMain.handle('render:start', async (event, job) => {
 
     logRender(`Starting render job: ${job.id}`);
     logRender(`Input path: ${job.inputPath}`);
-    logRender(`Output path: ${job.outputPath}`);
+
+    // Ensure outputPath is a valid .mp4 file (not a directory)
+    let outputPath = job.outputPath;
+    if (!outputPath.toLowerCase().endsWith('.mp4')) {
+        const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
+        const fileName = `video_${timestamp}.mp4`;
+        outputPath = outputPath.endsWith('\\') || outputPath.endsWith('/')
+            ? `${outputPath}${fileName}`
+            : path.join(outputPath, fileName);
+        logRender(`Output path was directory, generated: ${outputPath}`);
+    }
+    logRender(`Output path: ${outputPath}`);
 
     const nodePath = getNodePath();
     const rendererPath = getRendererPath();
@@ -196,7 +220,7 @@ electron_1.ipcMain.handle('render:start', async (event, job) => {
     logRender(`Input file exists: ${fs.existsSync(job.inputPath)}`);
 
     return new Promise((resolve) => {
-        const childProcess = (0, child_process_1.spawn)(nodePath, [rendererPath, `--input=${job.inputPath}`, `--output=${job.outputPath}`]);
+        const childProcess = (0, child_process_1.spawn)(nodePath, [rendererPath, `--input=${job.inputPath}`, `--output=${outputPath}`]);
         activeRenderProcesses.set(job.id, childProcess);
 
         let errorOutput = '';
@@ -230,7 +254,7 @@ electron_1.ipcMain.handle('render:start', async (event, job) => {
             logRender(`Process closed with code: ${code}`);
             activeRenderProcesses.delete(job.id);
             if (code === 0) {
-                event.sender.send('render:complete', { id: job.id, outputPath: job.outputPath });
+                event.sender.send('render:complete', { id: job.id, outputPath: outputPath });
                 resolve({ success: true });
             }
             else {

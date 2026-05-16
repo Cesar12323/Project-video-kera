@@ -10,7 +10,7 @@ import { diagnoseRenderError, formatDiagnosisForAlert } from "@/lib/errorDiagnos
 
 export function EditorToolbar() {
     const { startRender, isRendering, addToHistory, updateProgress, setStage, resetRender, progress, updateHistoryStatus, failRender, setLastRenderedVideo } = useRenderStore();
-    const { filePath, content, setFilePath } = useEditorStore();
+    const { filePath, content, setFilePath, setContent } = useEditorStore();
 
     // Listen to Render Events
     React.useEffect(() => {
@@ -37,9 +37,7 @@ export function EditorToolbar() {
 
             setTimeout(() => {
                 resetRender();
-                // Removed alert to avoid blocking playback flow if desired, or keep it. Let's keep it but maybe notify less intrusively?
-                // For now, keeping alert as per user expectation basically
-                alert(`Rendering Completed! Video saved to: ${data.outputPath}`);
+                setContent(''); // Cancella lo script nell'editor dopo il rendering
             }, 500);
         });
 
@@ -57,7 +55,7 @@ export function EditorToolbar() {
             if (u2) u2();
             if (u3) u3();
         };
-    }, [updateProgress, setStage, resetRender]);
+    }, [updateProgress, setStage, resetRender, setContent]);
 
     const handleCopy = async () => {
         try {

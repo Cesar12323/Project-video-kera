@@ -172,7 +172,8 @@ async function main() {
         return webpackConfig;
       },
       onProgress: (percent) => {
-        progress(`Bundling: ${Math.round(percent * 100)}%`);
+        // percent from bundler is already 0-100, not 0-1
+        progress(`Bundling: ${Math.round(percent)}%`);
       },
     });
     clearProgress();

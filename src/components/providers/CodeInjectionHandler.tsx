@@ -4,7 +4,6 @@ import { useEffect, useRef } from "react";
 import { useEditorStore } from "@/stores/editorStore";
 import { useRenderStore } from "@/stores/renderStore";
 import { autoFixRemotionCode } from "@/lib/codeAutoFixer";
-import * as path from "path";
 
 // Generate temp file path for auto-render
 function generateTempFilePath(): string {
@@ -71,7 +70,22 @@ export function CodeInjectionHandler() {
               const timestamp = new Date().toISOString().replace(/[:.]/g, '-').substring(0, 19);
               const videosDir = window.electronAPI?.getVideosDir?.() ||
                 (typeof process !== 'undefined' ? process.env.USERPROFILE + '\\Videos' : '/tmp');
-              const finalOutputPath = outputPath || `${videosDir}\\n8n_Video_${timestamp}.mp4`;
+
+              // Ensure outputPath is a valid .mp4 file path (not a directory)
+              let finalOutputPath: string;
+              if (outputPath) {
+                // If outputPath doesn't end with .mp4, treat it as a directory and add filename
+                if (!outputPath.toLowerCase().endsWith('.mp4')) {
+                  const fileName = `video_${timestamp}.mp4`;
+                  finalOutputPath = outputPath.endsWith('\\') || outputPath.endsWith('/')
+                    ? `${outputPath}${fileName}`
+                    : `${outputPath}\\${fileName}`;
+                } else {
+                  finalOutputPath = outputPath;
+                }
+              } else {
+                finalOutputPath = `${videosDir}\\n8n_Video_${timestamp}.mp4`;
+              }
 
               // Construct proper job object
               const job = {
